@@ -1,10 +1,12 @@
 package com.example.myapplication;
 
+import static android.app.ProgressDialog.show;
 import static com.example.myapplication.R.id.btn2;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,17 +32,15 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+    findViewById(R.id.btn3).setOnClickListener(view->{
+        Toast.makeText(this, "Click Btn3", Toast.LENGTH_LONG).show();
+
+
+    });
 
 
 
 
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
     }
 
 
