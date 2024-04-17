@@ -22,8 +22,8 @@
     <LinearLayout
         android:id="@+id/layoutVert"
         android:layout_width="409dp"
-        android:layout_height="400dp"
-        android:layout_marginTop="25dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/textoCentral2"
         tools:layout_editor_absoluteX="1dp"></LinearLayout>

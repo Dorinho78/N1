@@ -6,18 +6,20 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.models.User;
+import com.example.myapplication.repositories.UserRepositorie;
+import com.example.myapplication.services.UserServices;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -48,9 +50,85 @@ public class SecondActivity extends AppCompatActivity {
         super.onStart();
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://www.guuuogle.com";
+        String url = "https://jsonplaceholder.typicode.com/users/2";
+        String url2 = "https://jsonplaceholder.typicode.com/users";
 
-        // Request a string response from the provided URL.
+        JsonArrayRequest jarrRequest = new JsonArrayRequest(Request.Method.GET, url2, null, new Response.Listener<org.json.JSONArray>() {
+            @Override
+            public void onResponse(org.json.JSONArray response) {
+                UserRepositorie repo = UserRepositorie.getInstance();
+
+                TextView tv = findViewById(R.id.textoCentral3);
+                String nomes = "";
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject obj = response.getJSONObject(i);
+                        User user = UserServices.createUserFromJson(obj);
+                        if (user != null) {
+                            repo.addUser(user);
+                            // nomes += user.getName() + "\n";
+                            // nomes += obj.getString("name") + " \n";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+               for (User u : repo.getAllUsers() ) {
+                   nomes += u.getName() + "\n";
+                }
+
+                tv.setText(nomes);
+            }
+        },
+        new Response.ErrorListener(){
+                @Override
+                public void onErrorResponse(VolleyError error){
+                    TextView tv = findViewById(R.id.textoCentral3);
+                    tv.setText("Nao funcionou2");
+                }
+
+            });
+
+            queue.add(jarrRequest);
+
+
+        /*JsonObjectRequest jasonRequest = new JsonObjectRequest(Request.Method.GET,url, null,
+                new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                TextView tv = findViewById(R.id.textoCentral3);*/
+
+
+
+
+
+      /*  JsonObjectRequest jasonRequest = new JsonObjectRequest(Request.Method.GET,url, null,
+                new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                TextView tv = findViewById(R.id.textoCentral3);
+                try {
+                    tv.setText(response.getString("name"));
+                } catch (JSONException e){
+                    tv.setText("Erro"+e.getMessage());
+                }
+
+            }
+        },
+        new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                TextView tv = findViewById(R.id.textoCentral3);
+                tv.setText("Nao funcionou!" +error.getMessage());
+            }
+        });
+
+        queue.add(jasonRequest);
+
+        /*
+
+
+        /* Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -69,6 +147,8 @@ public class SecondActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+
+         */
     }
 
 
